@@ -32,13 +32,14 @@ namespace DarkLibCW.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         //private readonly IEmailSender _emailSender;
         private readonly AppDBContext _context;
-
+        private readonly RoleManager<IdentityRole> _roleManager;
         public RegisterModel(
             UserManager<DarkLibUser> userManager,
             IUserStore<DarkLibUser> userStore,
             SignInManager<DarkLibUser> signInManager,
             ILogger<RegisterModel> logger,
-            AppDBContext context
+            AppDBContext context,
+            RoleManager<IdentityRole> roleManager
             /*IEmailSender emailSender*/)
         {
             _userManager = userManager;
@@ -48,6 +49,7 @@ namespace DarkLibCW.Areas.Identity.Pages.Account
             _logger = logger;
             /*_emailSender = emailSender*/;
             _context = context;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -136,7 +138,13 @@ namespace DarkLibCW.Areas.Identity.Pages.Account
                 user.Name = Input.FirstName;
                 user.MidName = Input.MidName;
 
-
+                if (!await _roleManager.RoleExistsAsync("admin"))
+                    await _roleManager.CreateAsync(new IdentityRole("admin"));
+                if (!await _roleManager.RoleExistsAsync("librarian"))
+                    await _roleManager.CreateAsync(new IdentityRole("librarian"));
+                if (!await _roleManager.RoleExistsAsync("guest"))
+                    await _roleManager.CreateAsync(new IdentityRole("guest"));
+                await _userManager.AddToRoleAsync(user, "guest");
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 //await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -147,6 +155,23 @@ namespace DarkLibCW.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+
+                    //Librarian l = new Librarian();
+                    //l.Name = Input.FirstName;
+                    //l.LastName = Input.LastName;
+                    //l.MidName = Input.MidName;
+                    //l.UserName = Input.Email;
+                    //_context.Librarians.Add(l);
+
+                    Subscriber s = new Subscriber();
+                    s.Name = Input.FirstName;
+                    s.LastName = Input.LastName;
+                    s.MidName = Input.MidName;
+                    s.UserName = Input.Email;
+                    _context.Subscribers.Add(s);
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Index");
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     //var callbackUrl = Url.Page(
@@ -192,13 +217,13 @@ namespace DarkLibCW.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<DarkLibUser> GetEmailStore()
-        {
-            if (!_userManager.SupportsUserEmail)
-            {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
-            }
-            return (IUserEmailStore<DarkLibUser>)_userStore;
-        }
+        //private IUserEmailStore<DarkLibUser> GetEmailStore()
+        //{
+        //    if (!_userManager.SupportsUserEmail)
+        //    {
+        //        throw new NotSupportedException("The default UI requires a user store with email support.");
+        //    }
+        //    return (IUserEmailStore<DarkLibUser>)_userStore;
+        //}
     }
 }

@@ -13,7 +13,5 @@ public class DarkLibUser : IdentityUser
     public string LastName { get; set; }
     public string Name { get; set; }
     public string MidName { get; set; }
-    public int Age { get; set; }
-    public string Gender { get; set; }
 }
 

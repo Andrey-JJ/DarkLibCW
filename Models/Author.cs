@@ -14,5 +14,7 @@ namespace DarkLibCW.Models
         public string? MidName { get; set; }
         [Display(Name = "ФИО")]
         public string FullName { get => $"{Name.Substring(0, 1)}. {MidName.Substring(0, 1)}. {LastName}"; }
+        public ICollection<CatalogCard>? CatalogCards { get; set; }
+        public Author() { CatalogCards = new List<CatalogCard>(); }
     }
 }

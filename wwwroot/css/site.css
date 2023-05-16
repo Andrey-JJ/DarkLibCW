@@ -44,6 +44,7 @@ body {
 
 .nav-link {
     color: rgba(255, 255, 255, 80%);
+    text-decoration: none;
 }
 
     .nav-link:hover {
@@ -191,6 +192,11 @@ body {
     }
 
 /*Кнопки*/
+
+form-create{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
 .btn {
     width: 200px;

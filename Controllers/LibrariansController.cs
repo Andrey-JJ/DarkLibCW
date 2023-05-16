@@ -9,87 +9,87 @@ using DarkLibCW.Models;
 
 namespace DarkLibCW.Controllers
 {
-    public class SubscribersController : Controller
+    public class LibrariansController : Controller
     {
         private readonly AppDBContext _context;
 
-        public SubscribersController(AppDBContext context)
+        public LibrariansController(AppDBContext context)
         {
             _context = context;
         }
 
-        // GET: Subscribers
+        // GET: Librarians
         public async Task<IActionResult> Index()
         {
-              return _context.Subscribers != null ? 
-                          View(await _context.Subscribers.ToListAsync()) :
-                          Problem("Entity set 'AppDBContext.Subscribers'  is null.");
+              return _context.Librarians != null ? 
+                          View(await _context.Librarians.ToListAsync()) :
+                          Problem("Entity set 'AppDBContext.Librarians'  is null.");
         }
 
-        // GET: Subscribers/Details/5
+        // GET: Librarians/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Subscribers == null)
+            if (id == null || _context.Librarians == null)
             {
                 return NotFound();
             }
 
-            var subscriber = await _context.Subscribers
+            var librarian = await _context.Librarians
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (subscriber == null)
+            if (librarian == null)
             {
                 return NotFound();
             }
 
-            return View(subscriber);
+            return View(librarian);
         }
 
-        // GET: Subscribers/Create
+        // GET: Librarians/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Subscribers/Create
+        // POST: Librarians/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LastName,Name,MidName,UserName")] Subscriber subscriber)
+        public async Task<IActionResult> Create([Bind("Id,LastName,Name,MidName,UserName")] Librarian librarian)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(subscriber);
+                _context.Add(librarian);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(subscriber);
+            return View(librarian);
         }
 
-        // GET: Subscribers/Edit/5
+        // GET: Librarians/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Subscribers == null)
+            if (id == null || _context.Librarians == null)
             {
                 return NotFound();
             }
 
-            var subscriber = await _context.Subscribers.FindAsync(id);
-            if (subscriber == null)
+            var librarian = await _context.Librarians.FindAsync(id);
+            if (librarian == null)
             {
                 return NotFound();
             }
-            return View(subscriber);
+            return View(librarian);
         }
 
-        // POST: Subscribers/Edit/5
+        // POST: Librarians/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LastName,Name,MidName,UserName")] Subscriber subscriber)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LastName,Name,MidName,UserName")] Librarian librarian)
         {
-            if (id != subscriber.Id)
+            if (id != librarian.Id)
             {
                 return NotFound();
             }
@@ -98,12 +98,12 @@ namespace DarkLibCW.Controllers
             {
                 try
                 {
-                    _context.Update(subscriber);
+                    _context.Update(librarian);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SubscriberExists(subscriber.Id))
+                    if (!LibrarianExists(librarian.Id))
                     {
                         return NotFound();
                     }
@@ -114,49 +114,49 @@ namespace DarkLibCW.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(subscriber);
+            return View(librarian);
         }
 
-        // GET: Subscribers/Delete/5
+        // GET: Librarians/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Subscribers == null)
+            if (id == null || _context.Librarians == null)
             {
                 return NotFound();
             }
 
-            var subscriber = await _context.Subscribers
+            var librarian = await _context.Librarians
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (subscriber == null)
+            if (librarian == null)
             {
                 return NotFound();
             }
 
-            return View(subscriber);
+            return View(librarian);
         }
 
-        // POST: Subscribers/Delete/5
+        // POST: Librarians/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Subscribers == null)
+            if (_context.Librarians == null)
             {
-                return Problem("Entity set 'AppDBContext.Subscribers'  is null.");
+                return Problem("Entity set 'AppDBContext.Librarians'  is null.");
             }
-            var subscriber = await _context.Subscribers.FindAsync(id);
-            if (subscriber != null)
+            var librarian = await _context.Librarians.FindAsync(id);
+            if (librarian != null)
             {
-                _context.Subscribers.Remove(subscriber);
+                _context.Librarians.Remove(librarian);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SubscriberExists(int id)
+        private bool LibrarianExists(int id)
         {
-          return (_context.Subscribers?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Librarians?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

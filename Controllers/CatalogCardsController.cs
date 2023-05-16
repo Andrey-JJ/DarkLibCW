@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DarkLibCW.Models;
 using DarkLibCW.Models.ViewModels;
 using Microsoft.IdentityModel.Tokens;
+using System.Numerics;
 
 namespace DarkLibCW.Controllers
 {
@@ -62,9 +63,11 @@ namespace DarkLibCW.Controllers
 
         // GET: CatalogCards/Create
         public IActionResult Create()
-        {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");
-            ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Id");
+        { 
+            //ViewBag.Authors = _context.Authors.ToList();
+            TempData.Put<List<Author>>("Authors", _context.Authors.ToList());
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Name");
             return View();
         }
 
@@ -73,16 +76,30 @@ namespace DarkLibCW.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,EditionId,EditionDate,Volume,Image,CategoryId")] CatalogCard catalogCard)
+        public async Task<IActionResult> Create([Bind("Id,Title,EditionId,EditionDate,Volume,Image,CategoryId")] CatalogCard catalogCard, int[] selectedAuthors, IFormFile uploadImg)
         {
             if (ModelState.IsValid)
             {
+                if (uploadImg != null)
+                {
+                    string path = "/Files/" + uploadImg.FileName;
+                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                    {
+                        await uploadImg.CopyToAsync(fileStream);
+                    }
+                    catalogCard.Image = path;
+                }
+                foreach (int id in selectedAuthors)
+                {
+                    Author author = await _context.Authors.FindAsync(id);
+                    catalogCard.Author.Add(author);
+                }
                 _context.Add(catalogCard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", catalogCard.CategoryId);
-            ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Id", catalogCard.EditionId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", catalogCard.CategoryId);
+            ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Name", catalogCard.EditionId);
             return View(catalogCard);
         }
 
@@ -99,8 +116,9 @@ namespace DarkLibCW.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", catalogCard.CategoryId);
-            ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Id", catalogCard.EditionId);
+            ViewBag.Authors = _context.Authors.ToList();
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", catalogCard.CategoryId);
+            ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Name", catalogCard.EditionId);
             return View(catalogCard);
         }
 
@@ -109,7 +127,7 @@ namespace DarkLibCW.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,EditionId,EditionDate,Volume,Image,CategoryId")] CatalogCard catalogCard)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,EditionId,EditionDate,Volume,Image,CategoryId")] CatalogCard catalogCard, IFormFile uploadImg)
         {
             if (id != catalogCard.Id)
             {
@@ -118,6 +136,21 @@ namespace DarkLibCW.Controllers
 
             if (ModelState.IsValid)
             {
+                if (uploadImg != null)
+                {
+                    string path = "/Files/" + uploadImg.FileName;
+                    using (var fileStream = new
+                   FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                    {
+                        await uploadImg.CopyToAsync(fileStream);
+                    }
+                    if (!catalogCard.Image.IsNullOrEmpty())
+                    {
+                        System.IO.File.Delete(_appEnvironment.WebRootPath + catalogCard.Image);
+                    }
+                    catalogCard.Image = path;
+                }
+
                 try
                 {
                     _context.Update(catalogCard);
@@ -136,8 +169,8 @@ namespace DarkLibCW.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", catalogCard.CategoryId);
-            ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Id", catalogCard.EditionId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", catalogCard.CategoryId);
+            ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Name", catalogCard.EditionId);
             return View(catalogCard);
         }
 

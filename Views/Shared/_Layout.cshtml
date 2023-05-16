@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RS_Course work</title>
+    <title>@ViewData["Title"] - DarkLib</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DarkLibCW.styles.css" asp-append-version="true" />
@@ -12,23 +12,26 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RS_Course work</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DarkLib</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            @if (User.IsInRole("admin") || User.IsInRole("librarian"))
-                            {
-                                <a class="dropdown-item" asp-controller="CatalogCards" asp-action="Index">Каталожные карточки</a>
-                            }
-                            else{
-                            <a class="dropdown-item" asp-controller="CatalogCards" asp-action="Index">Книги</a>
-                            }
+                            <a asp-controller="CatalogCards" asp-action="Index">
+                                @if (User.IsInRole("admin") || User.IsInRole("librarian"))
+                                {
+                                    <div class="nav-link">Каталожные карточки</div>
+                                }
+                                else
+                                {
+                                    <div class="nav-link">Книги</div>
+                                }
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Категории</a>
+                            <a class="nav-link" asp-controller="Categories" asp-action="Index">Категории</a>
                         </li>
                         @if (User.IsInRole("admin") || User.IsInRole("librarian"))
                         {
@@ -38,6 +41,9 @@
                                     <li><a class="dropdown-item" asp-controller="Books" asp-action="Index">Таблица Книг</a></li>
                                     <li><a class="dropdown-item" asp-controller="Issues" asp-action="Index">Выдача</a></li>
                                     <li><a class="dropdown-item" asp-controller="Bookings" asp-action="Index">Бронь</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Authors" asp-action="Index">Авторы</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Editions" asp-action="Index">Издания</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Status" asp-action="Index">Статусы</a></li>
                                     <li><a class="dropdown-item" asp-controller="Librarians" asp-action="Index">Библиотекари</a></li>
                                     <li><a class="dropdown-item" asp-controller="Subscribers" asp-action="Index">Абоненты</a></li>
                                 </ul>
@@ -45,38 +51,42 @@
                         }
                     </ul>
                 </div>
-                <input class="form-control search-form w-100" type="text" name="search-form" id="search-form" placeholder="Поиск" aria-label="Search">
+                <div class="navbar-nav searh-input">
+                    <input class="form-control search-form w-100" type="text" name="search-form" id="search-form" placeholder="Поиск" aria-label="Search">
+                </div>
                 <div class="navbar-nav">
                     <partial name="_LoginPartial" class="nav-log-reg">
                 </div>
-                <section class="dop-canvas">
-                    <a class="dopsets" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                        <span class="ds-lines"></span>
-                        <span class="ds-lines"></span>
-                        <span class="ds-lines"></span>
-                    </a>
-                    @*<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                    <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Вне холста</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                    <div>
-                    Какой-то текст в качестве заполнителя. В реальной жизни у вас могут быть элементы, которые Вы выбрали. Нравится, текст, изображения, списки и т. д.
-                    </div>
-                    <div class="dropdown mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                    Кнопка раскрывающегося списка
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" href="#">Действие</a></li>
-                    <li><a class="dropdown-item" href="#">Другое действие</a></li>
-                    <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
-                    </ul>
-                    </div>
-                    </div>
-                    </div>*@
-                </section>
+                <div class="navbar-nav">
+                    <section class="dop-canvas">
+                        <a class="dopsets" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                            <span class="ds-lines"></span>
+                            <span class="ds-lines"></span>
+                            <span class="ds-lines"></span>
+                        </a>
+                        @*<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Вне холста</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                        <div>
+                        Какой-то текст в качестве заполнителя. В реальной жизни у вас могут быть элементы, которые Вы выбрали. Нравится, текст, изображения, списки и т. д.
+                        </div>
+                        <div class="dropdown mt-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                        Кнопка раскрывающегося списка
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Действие</a></li>
+                        <li><a class="dropdown-item" href="#">Другое действие</a></li>
+                        <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
+                        </ul>
+                        </div>
+                        </div>
+                        </div>*@
+                    </section>
+                </div>
             </div>
         </nav>
     </header>

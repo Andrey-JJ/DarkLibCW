@@ -12,12 +12,8 @@ namespace DarkLibCW.Models
         public string Name { get; set; }
         [Display(Name = "Отчество")]
         public string? MidName { get; set; }
-        [Display(Name = "Возраст")]
-        public int? Age { get; set; }
         [Display(Name = "ФИО")]
         public string FullName { get => $"{LastName} {Name} {MidName}"; }
-        [Display(Name = "Пол")]
-        public string Gender { get; set; }
         public string? UserName { get; set; }
     }
 }

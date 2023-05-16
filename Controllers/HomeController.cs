@@ -1,4 +1,6 @@
-﻿using DarkLibCW.Models;
+﻿using DarkLibCW.Areas.Identity.Data;
+using DarkLibCW.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,10 +9,11 @@ namespace DarkLibCW.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly UserManager<DarkLibUser> _userManager;
+        public HomeController(ILogger<HomeController> logger, UserManager<DarkLibUser> userManager)
         {
             _logger = logger;
+            _userManager = userManager;
         }
 
         public IActionResult Index()

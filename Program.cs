@@ -8,12 +8,18 @@ using DarkLibCW.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppDB")));
 
 builder.Services.AddDbContext<LibIdContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppDB")));
-
-builder.Services.AddIdentity<DarkLibUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<LibIdContext>();
+builder.Services.AddIdentity<DarkLibUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 4;
+}).AddEntityFrameworkStores<LibIdContext>().AddUserManager<UserManager<DarkLibUser>>();
 
 builder.Services.ConfigureApplicationCookie(opt =>
 {
@@ -46,5 +52,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages();
 
 app.Run();
