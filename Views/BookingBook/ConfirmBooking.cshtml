@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "ConfirmBooking";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="bk-info--title">Подтвердите выбор для бронирования!</h4>
+        <form asp-action="CreateBooking">
+            <div class="bk-info--text">
+                <input type="hidden" name="BookId" value="@ViewBag.BookId">
+                <span class="bk-info-text-display">Книга - @ViewBag.Card</span>
+            </div>
+            <div class="bk-info--text">
+                <input type="hidden" name="SubId" value="@ViewBag.SubId">
+                <span class="bk-info-text-display">Читатель - @ViewBag.Sub</span>
+            </div>
+            <input type="hidden" name="CardId" value="@ViewBag.CardId">
+            <input class="btn btn-1" type="submit" value="Подтверждение">
+        </form>
+    </div>
+    <div>
+        <a asp-action="ChooseSub" asp-route-catalogid="@ViewBag.CardId" class="btn btn-back" type="submit">Назад</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

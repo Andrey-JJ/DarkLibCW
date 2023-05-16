@@ -1,0 +1,55 @@
+﻿@model DarkLibCW.Models.CatalogCard
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Добавление каталожной карточки</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EditionId" class="control-label"></label>
+                <select asp-for="EditionId" class ="form-control" asp-items="ViewBag.EditionId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="EditionDate" class="control-label"></label>
+                <input asp-for="EditionDate" class="form-control" />
+                <span asp-validation-for="EditionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Volume" class="control-label"></label>
+                <input asp-for="Volume" class="form-control" />
+                <span asp-validation-for="Volume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="mt-4">
+                    <input type="file" name="uploadImg" class="form-control" /><br>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <a asp-controller="Categories" asp-action="Create" type="submit" class="btn btn-1">Добавить</a>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Создание" class="btn btn-1" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-back" asp-action="Index">Вернуться к списку</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

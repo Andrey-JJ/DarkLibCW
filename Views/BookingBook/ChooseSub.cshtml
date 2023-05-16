@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "ChooseSub";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model DarkLibCW.Models.ViewModels.BookAndSubs
+
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="bk-info--title">Выберите читателя</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Subscribers.First().FullName)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Subscribers)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            <a asp-action="ConfirmBooking" asp-route-bookId="@Model.book.Id" asp-route-subId="@item.Id" asp-route-cardId="@Model.CardId" type="submit" class="btn btn-1">Оформить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <a asp-controller="CatalogCards" asp-action="Details" asp-route-id="@Model.CardId" class="btn btn-back" type="submit">Назад</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

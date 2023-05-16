@@ -1,0 +1,77 @@
+﻿@model DarkLibCW.Models.ViewModels.IssuesOfBook
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h4>Книга: </h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.CatalogCard)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Book.CatalogCard.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.BookStatus)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Book.BookStatus.Type)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Book.Id" class="btn btn-edit" type="submit">Изменить данные</a>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-back" type="submit">Вернуться к списку</a>
+</div>
+@if (User.IsInRole("admin") || User.IsInRole("librarian"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Issues.First().Subscriber.FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Issues.First().Librarian.FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Issues.First().IssueDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Issues.First().ReturnDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Issues)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subscriber.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Librarian.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IssueDate.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReturnDate.Date)
+                    </td>
+                    @*<td>
+                        <a asp-controller="Issues" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-edit">Изменить</a> |
+                        <a asp-controller="Issues" asp-action="Details" asp-route-id="@item.Id" class="btn btn-1">Информация</a> |
+                        <a asp-controller="Issues" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-delete">Удалить</a>
+                    </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+}

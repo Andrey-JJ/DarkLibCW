@@ -1,0 +1,85 @@
+﻿@model DarkLibCW.Models.ViewModels.CardAndBooks
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="bk-container">
+    <h3 class="bk-info--title">@Html.DisplayFor(model => model.CatalogCard.Title)</h3>
+    <section class="row row-cols-1 row-cols-sm-2 row-cols-md-5">
+        <div class="col bk-img-container">
+            <div class="bk-img--detailed">
+                <input type="hidden" name="Image" value="@Model.CatalogCard.Image" />
+                @if (ViewBag.Image != null)
+                {
+                    <img src="data:image/jpeg;base64,@(Convert.ToBase64String(ViewBag.Image))" alt="book-img.jpg" class="mt-4 mb-4 book-image">
+                }
+            </div>
+        </div>
+        <div class="col"></div>
+        <div class="col bk-info-container">
+            <div class="book-info--detailed">
+                <h6 class="bk-info-text">О произведении:</h6>
+                <p class="bk-info-text-display-for">
+                    <span class="bk-info-text-display-forname">@Html.DisplayNameFor(model => model.CatalogCard.Author)</span> - @string.Join(", ", Model.CatalogCard.Author.Select(a => a.FullName))
+                </p>
+                <p class="bk-info-text-display-for">
+                    <span class="bk-info-text-display-forname">@Html.DisplayNameFor(model => model.CatalogCard.Edition)</span> - @Html.DisplayFor(model => model.CatalogCard.Edition.Name)
+                </p>
+                <p class="bk-info-text-display-for">
+                    <span class="bk-info-text-display-forname">@Html.DisplayNameFor(model => model.CatalogCard.Volume)</span> - @Html.DisplayFor(model => model.CatalogCard.Volume)
+                </p>
+                <p class="bk-info-text-display-for">
+                    <span class="bk-info-text-display-forname">@Html.DisplayNameFor(model => model.CatalogCard.Category)</span> - @Html.DisplayFor(model => model.CatalogCard.Category.Name)
+                </p>
+            </div>
+            <div>
+                <a asp-controller="BookingBook" asp-action="ChooseSub" asp-route-catalogid="@Model.CatalogCard.Id" type="submit" class="btn btn-1">Забронировать</a>
+            </div>
+        </div>
+    </section>
+    <div class="bk-buttons">
+        <h6 class="bk-info-text">Функции для спец. пользователей</h6>
+        <a asp-action="Edit" asp-route-id="@Model.CatalogCard.Id" class="btn btn-edit" type="submit">Изменить</a>
+        <a asp-action="Delete" asp-route-id="@Model.CatalogCard.Id" class="btn btn-delete" type="submit">Удалить</a>
+    </div>
+</div>
+@*@if (User.IsInRole("admin") || User.IsInRole("librarian"))
+{*@
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.First().Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.First().BookStatus)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Books)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookStatus.Type)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-edit" type="submit">Изменить запись</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-1" type="submit">Информация</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-delete" type="submit">Удалить запись</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+@*}*@
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
