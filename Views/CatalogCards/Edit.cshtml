@@ -18,36 +18,43 @@
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+            <hr />
             <div class="form-group">
                 <label asp-for="Edition" class="control-label"></label>
                 <input asp-for="Edition" class="form-control" />
                 <span asp-validation-for="Edition" class="text-danger"></span>
             </div>
+            <hr />
             <div class="form-group">
                 <label asp-for="Author" class="control-label"></label>
                 <input asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
+            <hr />
             <div class="form-group">
                 <label asp-for="Volume" class="control-label"></label>
                 <input asp-for="Volume" class="form-control" />
                 <span asp-validation-for="Volume" class="text-danger"></span>
             </div>
+            <hr />
             <input type="hidden" name="Image" value="@Model.Image" />
             @if (ViewBag.Image != null)
             {
                 <img class="mt-4 mb-4 book-image" src="data:image/jpeg;base64,@(Convert.ToBase64String(ViewBag.Image))">
             }
+            <hr />
             <div class="form-group">
                 <div class="mt-4">
                     <input type="file" name="uploadImg" class="form-control" /><br>
                 </div>
             </div>
+            <hr />
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
+            <hr />
             <div class="form-group">
                 <input type="submit" value="Сохранить изменения" class="btn btn-primary" />
             </div>

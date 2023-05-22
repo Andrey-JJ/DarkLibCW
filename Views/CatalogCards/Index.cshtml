@@ -9,24 +9,16 @@
     <a asp-action="Create" class="btn btn-1">Добавление новой записи</a>
 </p>
 
-@foreach (var item in Model)
-{
-    <div class="card-container">
-        <a asp-action="Details" asp-route-id="@item.Id" class="card-wrapper">
-            <div class="card-image-ct">
-                <input type="hidden" name="Image" value="@item.Image" />
-                @if (ViewBag.Image != null)
-                {
-                    <img src="data:image/jpeg;base64,@(Convert.ToBase64String(ViewBag.Image))" alt="book-img.jpg" class="mt-4 mb-4 card-image">
-                }
-            </div>
-            <div class="card-info-ct">
-                <h3 class="card-title line-clamp">@Html.DisplayFor(modelItem => item.Title)</h3>
-                <ul class="card-info-edition">
-                    <li>@Html.DisplayFor(modelItem => item.Edition)</li>
-                    <li>@Html.DisplayFor(modelItem => item.EditionDate)</li>
-                </ul>
-            </div>
-        </a>
-    </div>
-}
+<h1 class="text-center my-4">Все каталожные карточки</h1>
+<div class="row">
+    @foreach (var card in Model)
+    {
+        <div class="col-md-2 my-2">
+            <a href="@Url.Action("Details", "CatalogCards", new { id = card.Id })">
+                <img src="@card.Image" class="img-thumbnail" />
+                <h5 class="mt-2 mb-0 card-wrapper">@card.Title</h5>
+                <p class="mb-1 card-wrapper">@card.Edition.Name, @card.EditionDate.Year</p>
+            </a>
+        </div>
+    }
+</div>

@@ -8,59 +8,64 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group form-create">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group form-create">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>@Html.DisplayNameFor(model => model.Author)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach(var item in TempData.Peek<List<Author>>("Authors"))
+            <hr/>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <div class="overflow-auto" style="max-height: 226px;">
+                    <div class="list-group list-group-flush">
+                        @foreach (var item in TempData.Peek<List<Author>>("Authors"))
                         {
-                            <tr>
-                                <td>@item.FullName</td>
-                                <td>
-                                    <input type="checkbox" name="selectedAuthors[]" value="@item.Id" />
-                                </td>
-                            </tr>
+                            <div class="list-group-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selectedAuthors" value="@item.Id" id="@("checkbox" + item.Id)">
+                                    <label class="form-check-label" for="@("checkbox" + item.Id)">
+                                        @item.FullName
+                                    </label>
+                                </div>
+                            </div>
                         }
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
+            <hr />
             <div class="form-group form-create">
                 <label asp-for="EditionId" class="control-label"></label>
                 <select asp-for="EditionId" class ="form-control" asp-items="ViewBag.EditionId"></select>
                 <div><a asp-controller="Editions" asp-action="Create" type="submit" class="btn btn-1">Добавить издательство</a></div>
             </div>
+            <hr />
             <div class="form-group form-create">
                 <label asp-for="EditionDate" class="control-label"></label>
                 <input asp-for="EditionDate" class="form-control" />
                 <span asp-validation-for="EditionDate" class="text-danger"></span>
             </div>
+            <hr />
             <div class="form-group form-create">
                 <label asp-for="Volume" class="control-label"></label>
                 <input asp-for="Volume" class="form-control" />
                 <span asp-validation-for="Volume" class="text-danger"></span>
             </div>
+            <hr />
             <div class="form-group form-create">
-                <h4>Выберите изображение</h4>
+                <label asp-for="Image" class="control-label"></label>
                 <div class="mt-4">
                     <input type="file" name="uploadImg" class="form-control" /><br>
                 </div>
             </div>
+            <hr />
             <div class="form-group form-create">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
                 <div><a asp-controller="Categories" asp-action="Create" type="submit" class="btn btn-1">Добавить категорию</a></div>
             </div>
+            <hr />
             <div class="form-group form-create">
                 <input type="submit" value="Создание" class="btn btn-1" />
             </div>

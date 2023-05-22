@@ -9,6 +9,7 @@ using DarkLibCW.Models;
 using DarkLibCW.Models.ViewModels;
 using Microsoft.IdentityModel.Tokens;
 using System.Numerics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DarkLibCW.Controllers
 {
@@ -57,6 +58,8 @@ namespace DarkLibCW.Controllers
             CardAndBooks cardAndBooks = new CardAndBooks();
             cardAndBooks.CatalogCard = catalogCard;
             cardAndBooks.Books = _context.Books.Where(b => b.CatalogCardId == catalogCard.Id);
+
+            ViewBag.BookAuthors = string.Join(",", catalogCard.Author.Select(a => a.FullName));
 
             return View(cardAndBooks);
         }
