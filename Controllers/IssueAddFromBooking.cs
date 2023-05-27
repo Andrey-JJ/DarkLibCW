@@ -2,6 +2,7 @@
 using DarkLibCW.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DarkLibCW.Controllers
 {
@@ -14,22 +15,24 @@ namespace DarkLibCW.Controllers
             _context = context;
             _userManager = userManager;
         }
-
         public async Task<IActionResult> ChooseBookingToIssue()
         {
-            var bookings = _context.Bookings;
-
-            return View(bookings);
+            var bookings = _context.Bookings
+                .Include(b => b.Book).ThenInclude(book => book.CatalogCard)
+                .Include(b => b.Subscriber)
+                .ToListAsync();
+            return View(await bookings);
         }
-
-        public async Task<IActionResult> CreateWithBooking(int BookId, int SubId, DateTime ReturnDate)
+        [HttpPost]
+        public async Task<IActionResult> CreateWithBooking(int BookingId, int BookId, int SubId, DateTime ReturnDate)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            Librarian librarian = (Librarian)_context.Librarians.Where(l => l.UserName == User.Identity.Name);
+            Librarian librarian = (Librarian)_context.Librarians.Where(l => l.UserName == User.Identity.Name).FirstOrDefault();
             if (librarian == null) return NotFound();
 
-            Issue issue = new Issue();
+            Booking booking = await _context.Bookings.FindAsync(BookingId);
 
+            Issue issue = new Issue();
             issue.BookId = BookId;
             issue.SubscriberId = SubId;
             issue.LibrarianId = librarian.Id;
@@ -38,7 +41,11 @@ namespace DarkLibCW.Controllers
 
             _context.Issues.Add(issue);
 
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            _context.Bookings.Remove(booking);
+
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Issues");
         }

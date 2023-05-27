@@ -42,6 +42,7 @@
         <h6 class="bk-info-text">Функции для спец. пользователей</h6>
         <a asp-action="Edit" asp-route-id="@Model.CatalogCard.Id" class="btn btn-edit" type="submit">Изменить</a>
         <a asp-action="Delete" asp-route-id="@Model.CatalogCard.Id" class="btn btn-delete" type="submit">Удалить</a>
+        <a asp-controller="AddManyBooks" asp-action="GetCountsOfBooks" asp-route-CardId="@Model.CatalogCard.Id" class="btn btn-1" type="submit">Добавить экземпляры</a>
     </div>
 </div>
 @*@if (User.IsInRole("admin") || User.IsInRole("librarian"))

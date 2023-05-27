@@ -1,0 +1,48 @@
+﻿@model IEnumerable<DarkLibCW.Models.Booking>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Выберите бронь для выдачи</h1>
+
+<div class="row">
+    <form asp-action="CreateWithBooking">
+        <h6>Выберите дату возврата книги</h6>
+        <input type="date" name="ReturnDate"/>
+        <hr />
+        @foreach(var item in Model)
+        {
+            <input type="hidden" name="BookingId" value="@item.Id"/>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Book)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Subscriber)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Book.CatalogCard.Title)
+                            <input type="hidden" name="BookId" value="@item.BookId"/>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subscriber.FullName)
+                            <input type="hidden" name="SubId" value="@item.SubscriberId" />
+                        </td>
+                        <td>
+                            <input class="btn btn-1" type="submit" value="Выбрать">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </form>
+</div>
+
