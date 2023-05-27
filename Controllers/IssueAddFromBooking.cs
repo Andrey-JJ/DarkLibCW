@@ -32,6 +32,9 @@ namespace DarkLibCW.Controllers
 
             Booking booking = await _context.Bookings.FindAsync(BookingId);
 
+            Book book = await _context.Books.FindAsync(BookId);
+            book.StatusId = 2;
+
             Issue issue = new Issue();
             issue.BookId = BookId;
             issue.SubscriberId = SubId;
@@ -40,11 +43,12 @@ namespace DarkLibCW.Controllers
             issue.ReturnDate = ReturnDate.Date;
 
             _context.Issues.Add(issue);
-
             await _context.SaveChangesAsync();
 
             _context.Bookings.Remove(booking);
+            await _context.SaveChangesAsync();
 
+            _context.Update(book);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Issues");
