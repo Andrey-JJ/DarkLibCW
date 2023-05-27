@@ -10,13 +10,15 @@ namespace DarkLibCW.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<DarkLibUser> _userManager;
-        public HomeController(ILogger<HomeController> logger, UserManager<DarkLibUser> userManager)
+        private readonly AppDBContext _context;
+        public HomeController(ILogger<HomeController> logger, UserManager<DarkLibUser> userManager, AppDBContext context)
         {
             _logger = logger;
             _userManager = userManager;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
