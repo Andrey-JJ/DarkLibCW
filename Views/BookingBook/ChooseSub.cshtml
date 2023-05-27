@@ -24,7 +24,7 @@
                             @Html.DisplayFor(modelItem => item.FullName)
                         </td>
                         <td>
-                            <a asp-action="ConfirmBooking" asp-route-bookId="@Model.book.Id" asp-route-subId="@item.Id" asp-route-cardId="@Model.CardId" type="submit" class="btn btn-1">Оформить</a>
+                            <a asp-action="ConfirmBooking" asp-route-BookId="@Model.book.Id" asp-route-SubId="@item.Id" asp-route-CardId="@Model.CardId" type="submit" class="btn btn-1">Оформить</a>
                         </td>
                     </tr>
                 }

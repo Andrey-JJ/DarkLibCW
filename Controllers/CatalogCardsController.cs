@@ -42,6 +42,7 @@ namespace DarkLibCW.Controllers
             var catalogCard = await _context.CatalogCards
                 .Include(c => c.Category)
                 .Include(c => c.Edition)
+                .Include(c => c.Author)    
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (catalogCard == null)
             {

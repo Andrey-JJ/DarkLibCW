@@ -15,7 +15,6 @@ namespace DarkLibCW.Models
         public Edition? Edition { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "yyyy")]
         [Display(Name = "Дата издания")]
         public DateTime EditionDate { get; set; }
 

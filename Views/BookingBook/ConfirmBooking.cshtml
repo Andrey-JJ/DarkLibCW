@@ -10,18 +10,18 @@
         <form asp-action="CreateBooking">
             <div class="bk-info--text">
                 <input type="hidden" name="BookId" value="@ViewBag.BookId">
-                <span class="bk-info-text-display">Книга - @ViewBag.Card</span>
+                <span class="bk-info-text-display">Книга - @ViewBag.Card.Title</span>
             </div>
             <div class="bk-info--text">
                 <input type="hidden" name="SubId" value="@ViewBag.SubId">
-                <span class="bk-info-text-display">Читатель - @ViewBag.Sub</span>
+                <span class="bk-info-text-display">Читатель - @ViewBag.Sub.FullName</span>
             </div>
-            <input type="hidden" name="CardId" value="@ViewBag.CardId">
+            <input type="hidden" name="CardId" value="@ViewBag.Card.Id">
             <input class="btn btn-1" type="submit" value="Подтверждение">
         </form>
     </div>
     <div>
-        <a asp-action="ChooseSub" asp-route-catalogid="@ViewBag.CardId" class="btn btn-back" type="submit">Назад</a>
+        <a asp-action="ChooseSub" asp-route-catalogid="@ViewBag.Card.Id" class="btn btn-back" type="submit">Назад</a>
     </div>
 </div>
 
