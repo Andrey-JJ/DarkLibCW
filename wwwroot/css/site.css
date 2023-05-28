@@ -206,6 +206,13 @@ form-create{
     font-family: 'DIN Pro';
 }
 
+.btn-log_reg {
+    width: 100px;
+    height: 40px;
+    margin: 5px 10px 5px 10px;
+    font-family: 'DIN Pro';
+}
+
 .btn-1 {
     font-style: normal;
     font-size: 14px;

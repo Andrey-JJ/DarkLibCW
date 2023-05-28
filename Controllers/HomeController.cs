@@ -2,6 +2,7 @@
 using DarkLibCW.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace DarkLibCW.Controllers
@@ -20,7 +21,19 @@ namespace DarkLibCW.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // Ваш код для получения Id записи пользователя по его имени пользователя
+            string userName = User.Identity.Name;
+            int? subscriberId = await GetSubscriberIdByUserName(userName);
+
+            ViewBag.SubscriberId = subscriberId;
+
             return View();
+        }
+
+        private async Task<int?> GetSubscriberIdByUserName(string userName)
+        {
+            var subscriber = await _context.Subscribers.FirstOrDefaultAsync(s => s.UserName == userName);
+            return subscriber?.Id;
         }
 
         public IActionResult Privacy()

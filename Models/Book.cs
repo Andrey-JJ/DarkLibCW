@@ -12,6 +12,6 @@ namespace DarkLibCW.Models
         public CatalogCard? CatalogCard { get; set; }
         public int StatusId { get; set; }
         [Display(Name = "Состояние книги")]
-        public Status? BookStatus { get; set; } // "Выдана", "Забронирована", "Не выдана"
+        public Status? Status { get; set; } // "Выдана", "Забронирована", "Не выдана"
     }
 }

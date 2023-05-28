@@ -14,6 +14,7 @@ namespace DarkLibCW.Models
         public string? MidName { get; set; }
         [Display(Name = "ФИО")]
         public string FullName { get => $"{LastName} {Name} {MidName}"; }
+        public string ShortName { get => $"{LastName} {Name.Substring(0, 1)}. {MidName.Substring(0, 1)}."; }
         public string? UserName { get; set; }
     }
 }

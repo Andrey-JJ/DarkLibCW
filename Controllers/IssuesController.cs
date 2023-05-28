@@ -6,22 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DarkLibCW.Models;
+using OfficeOpenXml;
+using DarkLibCW.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using DarkLibCW.Models.ViewModels;
 
 namespace DarkLibCW.Controllers
 {
     public class IssuesController : Controller
     {
         private readonly AppDBContext _context;
-
-        public IssuesController(AppDBContext context)
+        private readonly UserManager<DarkLibUser> _userManager;
+        private readonly IWebHostEnvironment _appEnvironment;
+        public IssuesController(AppDBContext context, UserManager<DarkLibUser> userManager, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _userManager = userManager;
+            _appEnvironment = appEnvironment;
         }
 
         // GET: Issues
         public async Task<IActionResult> Index()
         {
-            var appDBContext = _context.Issues.Include(i => i.Book).Include(i => i.Librarian).Include(i => i.Subscriber);
+            var appDBContext = _context.Issues
+                .Include(i => i.Book).ThenInclude(b => b.CatalogCard)
+                .Include(i => i.Librarian)
+                .Include(i => i.Subscriber);
             return View(await appDBContext.ToListAsync());
         }
 
@@ -34,7 +44,8 @@ namespace DarkLibCW.Controllers
             }
 
             var issue = await _context.Issues
-                .Include(i => i.Book)
+                .Include(i => i.Book).ThenInclude(b => b.CatalogCard)
+                .Include(i => i.Book).ThenInclude(b => b.Status)
                 .Include(i => i.Librarian)
                 .Include(i => i.Subscriber)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -66,6 +77,12 @@ namespace DarkLibCW.Controllers
             {
                 _context.Add(issue);
                 await _context.SaveChangesAsync();
+
+                var book = _context.Books.Find(issue.BookId);
+                book.StatusId = 3;
+                _context.Update(book);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", issue.BookId);
@@ -174,6 +191,54 @@ namespace DarkLibCW.Controllers
         private bool IssueExists(int id)
         {
           return (_context.Issues?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public FileResult GetReport()
+        {
+            //будем использовть библитотеку не для коммерческого использования
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            var issues = _context.Issues
+                .Include(i => i.Book).ThenInclude(b => b.CatalogCard)
+                .Include(i => i.Subscriber)
+                .Include(i => i.Librarian)
+                .ToList();
+
+            string path = "/Reports/report_issues.xlsx";
+            //Путь к файлу с результатом
+            string result = $"/Reports/report_issuesAll.xlsx";
+            FileInfo fi = new FileInfo(_appEnvironment.WebRootPath + path);
+            FileInfo fr = new FileInfo(_appEnvironment.WebRootPath + result);
+
+            using (ExcelPackage excelPackage = new ExcelPackage(fi))
+            {
+                excelPackage.Workbook.Properties.Author = "Работник Р.Р.";
+                excelPackage.Workbook.Properties.Title = "Список выдачи за 30 дней";
+                excelPackage.Workbook.Properties.Subject = "Выдачи";
+                excelPackage.Workbook.Properties.Created = DateTime.Now;
+
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets["Issues"];
+                int startLine = 3;
+                foreach (var item in issues)
+                {
+                    worksheet.Cells[startLine, 1].Value = startLine - 2;
+                    worksheet.Cells[startLine, 2].Value = item.Id;
+                    worksheet.Cells[startLine, 3].Value = item.Book.CatalogCard.Title;
+                    worksheet.Cells[startLine, 4].Value = item.Subscriber.FullName;
+                    worksheet.Cells[startLine, 5].Value = item.Librarian.FullName;
+                    worksheet.Cells[startLine, 6].Style.Numberformat.Format = "dd.MM.yyyy";
+                    worksheet.Cells[startLine, 7].Style.Numberformat.Format = "dd.MM.yyyy";
+                    worksheet.Cells[startLine, 6].Value = item.IssueDate.Date;
+                    worksheet.Cells[startLine, 7].Value = item.ReturnDate.Date;
+                }
+
+                excelPackage.SaveAs(fr);
+            }
+            // Тип файла - content-type
+            string file_type = "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet";
+            // Имя файла - необязательно
+            string file_name = $"report_issuesAll.xlsx";
+            return File(result, file_type, file_name);
         }
     }
 }

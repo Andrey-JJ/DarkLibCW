@@ -9,10 +9,14 @@
 <p>
     <a class="btn btn-1" asp-action="Create">Создать новую выдачу</a>
     <a class="btn btn-1" asp-controller="IssueAddFromBooking" asp-action="ChooseBookingToIssue">Добавить из бронирования</a>
+    <a class="btn btn-1" asp-action="GetReport">Получить отчет</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BookId)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Book)
             </th>
@@ -35,19 +39,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Book.Id)
+                @Html.DisplayFor(modelItem => item.BookId)
+            </td>    
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.CatalogCard.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Subscriber.Id)
+                @Html.DisplayFor(modelItem => item.Subscriber.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Librarian.Id)
+                @Html.DisplayFor(modelItem => item.Librarian.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IssueDate)
+                @Html.DisplayFor(modelItem => item.IssueDate.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ReturnDate)
+                @Html.DisplayFor(modelItem => item.ReturnDate.Date)
             </td>
             <td>
                 <a asp-action="Edit" class="btn btn-edit" asp-route-id="@item.Id">Изменить</a>

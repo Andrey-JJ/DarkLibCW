@@ -33,7 +33,7 @@ namespace DarkLibCW.Controllers
             Booking booking = await _context.Bookings.FindAsync(BookingId);
 
             Book book = await _context.Books.FindAsync(BookId);
-            book.StatusId = 2;
+            book.StatusId = 3;
 
             Issue issue = new Issue();
             issue.BookId = BookId;

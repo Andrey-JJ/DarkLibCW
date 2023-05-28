@@ -58,7 +58,7 @@ namespace DarkLibCW.Controllers
 
             CardAndBooks cardAndBooks = new CardAndBooks();
             cardAndBooks.CatalogCard = catalogCard;
-            cardAndBooks.Books = _context.Books.Where(b => b.CatalogCardId == catalogCard.Id);
+            cardAndBooks.Books = _context.Books.Where(b => b.CatalogCardId == catalogCard.Id).Include(b => b.Status);
 
             ViewBag.BookAuthors = string.Join(",", catalogCard.Author.Select(a => a.FullName));
 
@@ -68,7 +68,6 @@ namespace DarkLibCW.Controllers
         // GET: CatalogCards/Create
         public IActionResult Create()
         { 
-            //ViewBag.Authors = _context.Authors.ToList();
             TempData.Put<List<Author>>("Authors", _context.Authors.ToList());
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             ViewData["EditionId"] = new SelectList(_context.Editions, "Id", "Name");

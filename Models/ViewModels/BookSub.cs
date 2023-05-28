@@ -1,6 +1,6 @@
 ﻿namespace DarkLibCW.Models.ViewModels
 {
-    public class BookAndSub
+    public class BookSub
     {
         public int CardId { get; set; }
         public Book Book { get; set; }

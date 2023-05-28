@@ -23,8 +23,7 @@ namespace DarkLibCW.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if(await _userManager.IsInRoleAsync(user, "admin") || await _userManager.IsInRoleAsync(user, "librarian"))
             {
-                BookAndSubs bs = new BookAndSubs();
-
+                BookListSubscribers bs = new BookListSubscribers();
                 bs.CardId = catalogid;
                 bs.book = _context.Books.Where(book => book.CatalogCardId == catalogid && book.StatusId == 1).First();
 
@@ -39,14 +38,14 @@ namespace DarkLibCW.Controllers
             //Для читателя
             else
             {
-                BookAndSub bs = new BookAndSub();
-
+                BookSub bs = new BookSub();
                 bs.CardId = catalogid;
                 bs.Book = _context.Books.Where(book => book.CatalogCardId == catalogid && book.StatusId == 1).First();
 
                 if (bs.Book == null) return NotFound();
 
                 bs.Subscriber = (Subscriber)_context.Subscribers.Where(s => s.UserName == User.Identity.Name).FirstOrDefault();
+
                 if (bs.Subscriber == null) return NotFound();
                 return RedirectToAction("ConfirmBooking", "BookingBook", new { BookId = bs.Book.Id, SubId = bs.Subscriber.Id, CardId = catalogid });
             }
@@ -69,12 +68,15 @@ namespace DarkLibCW.Controllers
             booking.BookId = BookId;
             booking.SubscriberId = SubId;
             _context.Add(booking);
+
             await _context.SaveChangesAsync();
 
             var book = _context.Books.Find(BookId);
             book.StatusId = 2;
             _context.Update(book);
+
             await _context.SaveChangesAsync(); 
+
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (await _userManager.IsInRoleAsync(user, "admin") || await _userManager.IsInRoleAsync(user, "librarian"))
                 return RedirectToAction("Index", "Bookings");

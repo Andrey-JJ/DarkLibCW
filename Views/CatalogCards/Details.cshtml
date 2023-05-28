@@ -38,15 +38,17 @@
             </div>
         </div>
     </section>
+</div>
+@if (User.IsInRole("admin") || User.IsInRole("librarian"))
+{
     <div class="bk-buttons">
         <h6 class="bk-info-text">Функции для спец. пользователей</h6>
         <a asp-action="Edit" asp-route-id="@Model.CatalogCard.Id" class="btn btn-edit" type="submit">Изменить</a>
         <a asp-action="Delete" asp-route-id="@Model.CatalogCard.Id" class="btn btn-delete" type="submit">Удалить</a>
-        <a asp-controller="AddManyBooks" asp-action="GetCountsOfBooks" asp-route-CardId="@Model.CatalogCard.Id" class="btn btn-1" type="submit">Добавить экземпляры</a>
     </div>
-</div>
-@if (User.IsInRole("admin") || User.IsInRole("librarian"))
-{
+    <hr />
+    <h4>Список экземпляров книги:</h4>
+    <a asp-controller="AddManyBooks" asp-action="GetCountsOfBooks" asp-route-CardId="@Model.CatalogCard.Id" class="btn btn-1" type="submit">Добавить экземпляры</a>
     <table class="table">
         <thead>
             <tr>
@@ -54,7 +56,7 @@
                     @Html.DisplayNameFor(model => model.Books.First().Id)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Books.First().BookStatus)
+                    @Html.DisplayNameFor(model => model.Books.First().Status)
                 </th>
             </tr>
         </thead>
@@ -66,12 +68,12 @@
                         @Html.DisplayFor(modelItem => item.Id)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.BookStatus.Type)
+                        @Html.DisplayFor(modelItem => item.Status.Type)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-edit" type="submit">Изменить запись</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-1" type="submit">Информация</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-delete" type="submit">Удалить запись</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-1" type="submit">Детализация</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-delete" type="submit">Удалить</a>
+                        <a asp-action="GetReport" asp-controller="Books" asp-route-id="@item.Id" class="btn btn-1" type="submit">Получить отчет о книге</a>
                     </td>
                 </tr>
             }

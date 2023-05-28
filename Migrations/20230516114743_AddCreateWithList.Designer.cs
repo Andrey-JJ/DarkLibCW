@@ -309,13 +309,13 @@ namespace DarkLibCW.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DarkLibCW.Models.Status", "BookStatus")
+                    b.HasOne("DarkLibCW.Models.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BookStatus");
+                    b.Navigation("Status");
 
                     b.Navigation("CatalogCard");
                 });

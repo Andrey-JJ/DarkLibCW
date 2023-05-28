@@ -7,22 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DarkLibCW.Models;
 using DarkLibCW.Models.ViewModels;
+using OfficeOpenXml;
+using DarkLibCW.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DarkLibCW.Controllers
 {
     public class BooksController : Controller
     {
         private readonly AppDBContext _context;
-
-        public BooksController(AppDBContext context)
+        private readonly UserManager<DarkLibUser> _userManager;
+        private readonly IWebHostEnvironment _appEnvironment;
+        public BooksController(AppDBContext context, UserManager<DarkLibUser> userManager, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _userManager = userManager;
+            _appEnvironment = appEnvironment;
         }
 
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            var appDBContext = _context.Books.Include(b => b.BookStatus).Include(b => b.CatalogCard);
+            var appDBContext = _context.Books.Include(b => b.Status).Include(b => b.CatalogCard);
             return View(await appDBContext.ToListAsync());
         }
 
@@ -35,7 +42,7 @@ namespace DarkLibCW.Controllers
             }
 
             var book = await _context.Books
-                .Include(b => b.BookStatus)
+                .Include(b => b.Status)
                 .Include(b => b.CatalogCard)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
@@ -43,11 +50,12 @@ namespace DarkLibCW.Controllers
                 return NotFound();
             }
 
-            IssuesOfBook bookIssues = new IssuesOfBook();
-            bookIssues.Book = book;
-            bookIssues.Issues = _context.Issues.Where(i => i.BookId == book.Id);
+            BookData bookData = new BookData();
+            bookData.Book = book;
+            bookData.Issues = _context.Issues.Where(i => i.BookId == id);
+            bookData.Bookings = _context.Bookings.Where(I => I.BookId == id);
 
-            return View(bookIssues);
+            return View(bookData);
         }
 
         // GET: Books/Create
@@ -140,7 +148,7 @@ namespace DarkLibCW.Controllers
             }
 
             var book = await _context.Books
-                .Include(b => b.BookStatus)
+                .Include(b => b.Status)
                 .Include(b => b.CatalogCard)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
@@ -173,6 +181,68 @@ namespace DarkLibCW.Controllers
         private bool BookExists(int id)
         {
           return (_context.Books?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public FileResult GetReport(int id)
+        {
+            //будем использовть библитотеку не для коммерческого использования
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            var book = _context.Books
+                .Include(b => b.CatalogCard)
+                .FirstOrDefault(b => b.Id == id);
+            BookData bookData = new BookData();
+            bookData.Book = book;
+            bookData.Issues = _context.Issues
+                .Include(s => s.Subscriber)
+                .Include(s => s.Librarian)
+                .Where(i => i.BookId == id).ToList();
+            bookData.Bookings = _context.Bookings
+                .Include(s => s.Subscriber)
+                .Where(b => b.BookId == id).ToList();
+
+            // Путь к файлу с шаблоном
+            string path = "/Reports/report_book_data.xlsx";
+            //Путь к файлу с результатом
+            string result = $"/Reports/report_{book.CatalogCard.Title}№{book.Id}.xlsx";
+            FileInfo fi = new FileInfo(_appEnvironment.WebRootPath + path);
+            FileInfo fr = new FileInfo(_appEnvironment.WebRootPath + result);
+
+            using (ExcelPackage excelPackage = new ExcelPackage(fi))
+            {
+                excelPackage.Workbook.Properties.Author = "Работник Р.Р.";
+                excelPackage.Workbook.Properties.Title = "Список читателей книги";
+                excelPackage.Workbook.Properties.Subject = "Пользователи";
+                excelPackage.Workbook.Properties.Created = DateTime.Now;
+
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets["Data"];
+                int startLine = 3;
+                foreach (var issue in bookData.Issues)
+                {
+                    worksheet.Cells[startLine, 1].Value = startLine - 2;
+                    worksheet.Cells[startLine, 2].Value = issue.Id;
+                    worksheet.Cells[startLine, 3].Value = issue.Subscriber.FullName;
+                    worksheet.Cells[startLine, 4].Value = issue.Librarian.FullName;
+                    worksheet.Cells[startLine, 5].Style.Numberformat.Format = "dd.MM.yyyy";
+                    worksheet.Cells[startLine, 6].Style.Numberformat.Format = "dd.MM.yyyy";
+                    worksheet.Cells[startLine, 5].Value = issue.IssueDate.Date;
+                    worksheet.Cells[startLine, 6].Value = issue.ReturnDate.Date;
+                }
+                startLine = 3;
+                foreach (var booking in bookData.Bookings)
+                {
+                    worksheet.Cells[startLine, 8].Value = startLine - 2;
+                    worksheet.Cells[startLine, 9].Value = booking.Id;
+                    worksheet.Cells[startLine, 10].Value = booking.Subscriber.FullName;
+                }
+                excelPackage.SaveAs(fr);
+            }
+
+            // Тип файла - content-type
+            string file_type = "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet";
+            // Имя файла - необязательно
+            string file_name = $"report_{book.CatalogCard.Title}№{book.Id}.xlsx";
+            return File(result, file_type, file_name);
         }
     }
 }

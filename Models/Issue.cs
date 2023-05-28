@@ -7,6 +7,7 @@ namespace DarkLibCW.Models
     {
         // Основная информация
         public int Id { get; set; }
+        [Display(Name = "Номер книги")]
         public int BookId { get; set; }
         [Display(Name = "Название книги")]
         public Book? Book { get; set; }

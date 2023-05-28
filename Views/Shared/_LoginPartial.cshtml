@@ -8,22 +8,27 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a id="manage" class="nav-link nav-log-reg btn" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
-            @*<a class="nav-link nav-log-reg btn" asp-controller="">@UserManager.GetUserName(User)</a>*@
+        <a id="manage" class="nav-link nav-log-reg btn-log_reg" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
     </li>
+        @if (User.IsInRole("guest"))
+        {
+            <li class="nav-item">
+                <a id="details" class="nav-link nav-log-reg btn-log_reg" asp-controller="Subscribers" asp-route-id="@ViewBag.SubscriberId" asp-action="Details">Мой профиль</a>
+            </li>
+        }
     <li class="nav-item">
         <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link nav-log-reg btn btn-link border-0">Выход</button>
+                <button id="logout" type="submit" class="nav-link nav-log-reg btn btn-link btn-log_reg border-0">Выход</button>
         </form>
     </li>
 }
 else
 {
     <li class="nav-item">
-        <a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
+            <a class="nav-link btn-log_reg" id="register" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login">Вход</a>
+        <a class="nav-link btn-log_reg" id="login" asp-area="Identity" asp-page="/Account/Login">Вход</a>
     </li>
 }
 </ul>
