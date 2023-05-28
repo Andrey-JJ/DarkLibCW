@@ -13,7 +13,7 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
+    /*margin-bottom: 60px;*/
     background: #ffffff;
 }
 
@@ -407,6 +407,7 @@ form-create{
     padding-left: calc(var(--bs-gutter-x) * .5);
     margin-right: auto;
     margin-left: auto;
+    margin-bottom: 3rem;
 }
 
 /*footer*/
@@ -417,7 +418,6 @@ form-create{
     display: flex;
     justify-content: space-between;
     color: #fff;
-    margin-bottom: 1px;
     display: flex;
     text-align: left;
     font-family: 'DIN Pro';

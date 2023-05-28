@@ -79,7 +79,7 @@ namespace DarkLibCW.Controllers
             if (await _userManager.IsInRoleAsync(user, "admin") || await _userManager.IsInRoleAsync(user, "librarian"))
                 return RedirectToAction("Index", "Bookings");
             else
-                return RedirectToAction("Details", "CatalogCard", new { id = CardId });
+                return RedirectToAction("Details", "CatalogCards", new { id = CardId });
 
         }
     }

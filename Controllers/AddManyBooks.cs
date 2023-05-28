@@ -27,8 +27,8 @@ namespace DarkLibCW.Controllers
                 book.StatusId = 1;
                 _context.Books.Add(book);
             }
-            _context.SaveChangesAsync();
-            return RedirectToAction("Details", "CatalogCard", new { id = CardId });
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", "CatalogCards", new { id = CardId });
         }
     }
 }

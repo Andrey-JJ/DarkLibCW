@@ -4,15 +4,17 @@
 
 @model DarkLibCW.Models.CatalogCard
 
-<form asp-action="CreateBooks">
-    <h1 class="text-center my-4">Укажите кол-во книг для добавления</h1>
-    <input type="hidden" name="CardId" value="@Model.Id"/>
-    <div class="form-group form-create">
-        <input name="Count" type="number" class="form-control" />
+<div class="row">
+    <form asp-action="CreateBooks">
+        <h6 class="my-4">Укажите кол-во книг для добавления</h6>
+        <input type="hidden" name="CardId" value="@Model.Id" />
+        <div class="form-group form-create">
+            <input name="Count" type="number" class="form-control" />
+        </div>
+        <input class="btn btn-1" type="submit" value="Подтверждение">
+    </form>
+    <div>
+        <a asp-action="Details" asp-route-catalogid="@Model.Id" class="btn btn-back" type="submit">Назад</a>
     </div>
-    <input class="btn btn-1" type="submit" value="Подтверждение">
-</form>
-<div>
-    <a asp-action="Details" asp-route-catalogid="@Model.Id" class="btn btn-back" type="submit">Назад</a>
 </div>
 

@@ -45,8 +45,8 @@
         <a asp-controller="AddManyBooks" asp-action="GetCountsOfBooks" asp-route-CardId="@Model.CatalogCard.Id" class="btn btn-1" type="submit">Добавить экземпляры</a>
     </div>
 </div>
-@*@if (User.IsInRole("admin") || User.IsInRole("librarian"))
-{*@
+@if (User.IsInRole("admin") || User.IsInRole("librarian"))
+{
     <table class="table">
         <thead>
             <tr>
@@ -77,7 +77,7 @@
             }
         </tbody>
     </table>
-@*}*@
+}
 
 @section Scripts {
     @{

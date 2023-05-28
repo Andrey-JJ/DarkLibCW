@@ -144,7 +144,7 @@ namespace DarkLibCW.Areas.Identity.Pages.Account
                     await _roleManager.CreateAsync(new IdentityRole("librarian"));
                 if (!await _roleManager.RoleExistsAsync("guest"))
                     await _roleManager.CreateAsync(new IdentityRole("guest"));
-                await _userManager.AddToRoleAsync(user, "librarian");
+                await _userManager.AddToRoleAsync(user, "guest");
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 //await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -154,21 +154,19 @@ namespace DarkLibCW.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
+                    //Librarian l = new Librarian();
+                    //l.Name = Input.FirstName;
+                    //l.LastName = Input.LastName;
+                    //l.MidName = Input.MidName;
+                    //l.UserName = Input.Email;
+                    //_context.Librarians.Add(l);
 
-                    Librarian l = new Librarian();
-                    l.Name = Input.FirstName;
-                    l.LastName = Input.LastName;
-                    l.MidName = Input.MidName;
-                    l.UserName = Input.Email;
-                    _context.Librarians.Add(l);
-
-                    //Subscriber s = new Subscriber();
-                    //s.Name = Input.FirstName;
-                    //s.LastName = Input.LastName;
-                    //s.MidName = Input.MidName;
-                    //s.UserName = Input.Email;
-                    //_context.Subscribers.Add(s);
+                    Subscriber s = new Subscriber();
+                    s.Name = Input.FirstName;
+                    s.LastName = Input.LastName;
+                    s.MidName = Input.MidName;
+                    s.UserName = Input.Email;
+                    _context.Subscribers.Add(s);
                     _context.SaveChanges();
 
                     return RedirectToAction("Index");
