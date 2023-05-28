@@ -59,6 +59,7 @@ namespace DarkLibCW.Controllers
                 .Include(s => s.Book).ThenInclude(b => b.CatalogCard)
                 .Where(s => s.SubscriberId == subscriber.Id).ToList();
 
+            ViewData["UserId"] = subscriber.Id;
             return View(data);
         }
 

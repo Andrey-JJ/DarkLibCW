@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using DarkLibCW.Data;
 using DarkLibCW.Areas.Identity.Data;
+using Quartz;
+using DarkLibCW;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,9 +29,26 @@ builder.Services.ConfigureApplicationCookie(opt =>
     opt.LoginPath = new PathString("/Identity/Account/Login");
 });
 
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+    var jobKey = new JobKey("ExelReportSender");
+
+    q.AddJob<ReportSender>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(t => t
+    .ForJob(jobKey)
+    .WithIdentity("ExelReportSender-trigger")
+    .StartNow()
+    .WithSimpleSchedule(x => x.WithIntervalInMinutes(10)// настраиваем выполнениедействия через 1 минуту
+    .RepeatForever()) // бесконечное повторение
+    );
+}
+);
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 var app = builder.Build();
 

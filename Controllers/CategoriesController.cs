@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DarkLibCW.Models;
+using DarkLibCW.Models.ViewModels;
 
 namespace DarkLibCW.Controllers
 {
@@ -21,9 +22,18 @@ namespace DarkLibCW.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-              return _context.Categories != null ? 
-                          View(await _context.Categories.ToListAsync()) :
-                          Problem("Entity set 'AppDBContext.Categories'  is null.");
+            List<CategoryBooks> categoryBooks = new List<CategoryBooks>();
+            foreach (var category in _context.Categories.ToList())
+            {
+                CategoryBooks books = new CategoryBooks();
+                books.Category = category;
+                books.CatalogCards = _context.CatalogCards
+                .Include(c => c.Edition)
+                .Where(c => c.CategoryId == category.Id);
+
+                categoryBooks.Add(books);
+            }
+            return View(categoryBooks);
         }
 
         // GET: Categories/Details/5
@@ -41,7 +51,13 @@ namespace DarkLibCW.Controllers
                 return NotFound();
             }
 
-            return View(category);
+            CategoryBooks categoryBooks = new CategoryBooks();
+            categoryBooks.Category = category;
+            categoryBooks.CatalogCards = _context.CatalogCards
+                .Include(c => c.Edition)
+                .Where(c => c.CategoryId == id);
+
+            return View(categoryBooks);
         }
 
         // GET: Categories/Create

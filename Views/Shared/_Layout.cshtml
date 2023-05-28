@@ -19,16 +19,14 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a asp-controller="CatalogCards" asp-action="Index">
-                                @if (User.IsInRole("admin") || User.IsInRole("librarian"))
-                                {
-                                    <div class="nav-link">Каталожные карточки</div>
-                                }
-                                else
-                                {
-                                    <div class="nav-link">Книги</div>
-                                }
-                            </a>
+                            @if (User.IsInRole("admin") || User.IsInRole("librarian"))
+                            {
+                                <a class="nav-link" asp-controller="CatalogCards" asp-action="Index">Каталожные карточки</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" asp-controller="CatalogCards" asp-action="Index">Книги</a>
+                            }
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Categories" asp-action="Index">Категории</a>

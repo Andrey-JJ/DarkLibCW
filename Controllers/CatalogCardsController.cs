@@ -60,8 +60,6 @@ namespace DarkLibCW.Controllers
             cardAndBooks.CatalogCard = catalogCard;
             cardAndBooks.Books = _context.Books.Where(b => b.CatalogCardId == catalogCard.Id).Include(b => b.Status);
 
-            ViewBag.BookAuthors = string.Join(",", catalogCard.Author.Select(a => a.FullName));
-
             return View(cardAndBooks);
         }
 
@@ -114,7 +112,10 @@ namespace DarkLibCW.Controllers
                 return NotFound();
             }
 
-            var catalogCard = await _context.CatalogCards.FindAsync(id);
+            var catalogCard = await _context.CatalogCards
+                .Include(c => c.Author)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (catalogCard == null)
             {
                 return NotFound();
@@ -130,7 +131,7 @@ namespace DarkLibCW.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,EditionId,EditionDate,Volume,Image,CategoryId")] CatalogCard catalogCard, IFormFile uploadImg)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,EditionId,EditionDate,Volume,Image,CategoryId")] CatalogCard catalogCard, IFormFile uploadImg) //int[] selectedAuthors,
         {
             if (id != catalogCard.Id)
             {
@@ -153,6 +154,23 @@ namespace DarkLibCW.Controllers
                     }
                     catalogCard.Image = path;
                 }
+
+                //var existingAuthors = await _context.Authors.Where(a => selectedAuthors.Contains(a.Id)).ToListAsync();
+
+                //// Удаление связей с предыдущими авторами
+                //catalogCard.Author.Clear();
+
+                //// Добавление связей с выбранными авторами
+                //foreach (var author in existingAuthors)
+                //{
+                //    catalogCard.Author.Add(author);
+                //}
+
+                ////foreach (int id in selectedAuthors)
+                ////{
+                ////    Author author = await _context.Authors.FindAsync(id);
+                ////    catalogCard.Author.Add(author);
+                ////}
 
                 try
                 {

@@ -9,15 +9,15 @@
     <a asp-action="Create" class="btn btn-1">Добавление новой записи</a>
 </p>
 
-<h1 class="text-center my-4">Все каталожные карточки</h1>
+<h4>Все каталожные карточки</h4>
 <div class="row">
     @foreach (var card in Model)
     {
         <div class="col-md-2 my-2">
             <a href="@Url.Action("Details", "CatalogCards", new { id = card.Id })">
                 <img src="@card.Image" class="img-thumbnail" />
-                <h5 class="mt-2 mb-0 card-wrapper">@card.Title</h5>
-                <p class="mb-1 card-wrapper">@card.Edition.Name, @card.EditionDate.Year</p>
+                <h5 class="mt-2 mb-0 card-wrapper card-title">@card.Title</h5>
+                <p class="mb-1 card-wrapper card-title">@card.Edition.Name, @card.EditionDate.Year</p>
             </a>
         </div>
     }

@@ -1,13 +1,31 @@
-﻿@model IEnumerable<DarkLibCW.Models.Category>
+﻿@model IEnumerable<DarkLibCW.Models.ViewModels.CategoryBooks>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<p>
-    <a class="btn btn-1" asp-action="Create">Добавление новой записи</a>
-</p>
-<table class="table">
+@if(User.IsInRole("admin") || User.IsInRole("librarian"))
+{
+    <p>
+        <a class="btn btn-1" asp-action="Create">Добавление новой записи</a>
+    </p>
+}
+@foreach(var category in Model)
+{
+    <h4>@Html.DisplayFor(model => category.Category.Name)</h4>
+    <hr />
+    @foreach(var catalogCards in category.CatalogCards)
+    {
+        <div class="col-md-2 my-2">
+            <a href="@Url.Action("Details", "CatalogCards", new { id = catalogCards.Id })">
+                <img src="@catalogCards.Image" class="img-thumbnail" />
+                <h5 class="mt-2 mb-0 card-wrapper card-title">@catalogCards.Title</h5>
+                <p class="mb-1 card-wrapper card-title">@catalogCards.Edition.Name, @catalogCards.EditionDate.Year</p>
+            </a>
+        </div>
+    }
+}
+@*<table class="table">
     <thead>
         <tr>
             <th>
@@ -30,4 +48,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@

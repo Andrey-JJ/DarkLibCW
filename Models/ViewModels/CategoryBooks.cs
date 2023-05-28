@@ -1,8 +1,8 @@
 ﻿namespace DarkLibCW.Models.ViewModels
 {
-    public class CategoryAndBooks
+    public class CategoryBooks
     {
         public Category Category { get; set; }
-        public IEnumerable<CatalogCard> Books { get; set; }
+        public IEnumerable<CatalogCard> CatalogCards { get; set; }
     }
 }
