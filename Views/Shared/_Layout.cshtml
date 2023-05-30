@@ -39,11 +39,14 @@
                                     <li><a class="dropdown-item" asp-controller="Books" asp-action="Index">Таблица Книг</a></li>
                                     <li><a class="dropdown-item" asp-controller="Issues" asp-action="Index">Выдача</a></li>
                                     <li><a class="dropdown-item" asp-controller="Bookings" asp-action="Index">Бронь</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Authors" asp-action="Index">Авторы</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Editions" asp-action="Index">Издания</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Status" asp-action="Index">Статусы</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Librarians" asp-action="Index">Библиотекари</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Subscribers" asp-action="Index">Абоненты</a></li>
+                                    @if (User.IsInRole("admin"))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Authors" asp-action="Index">Авторы</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Editions" asp-action="Index">Издания</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Status" asp-action="Index">Статусы</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Librarians" asp-action="Index">Библиотекари</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Subscribers" asp-action="Index">Абоненты</a></li>
+                                    }
                                 </ul>
                             </li>
                         }

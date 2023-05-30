@@ -279,6 +279,14 @@ form-create{
 }
 
 .card-wrapper {
+    width: 220px;
+    align-content: center;
+    text-decoration: none;
+}
+
+.card--wrapper {
+    width: 220px;
+    height: 420px;
     align-content: center;
     text-decoration: none;
 }

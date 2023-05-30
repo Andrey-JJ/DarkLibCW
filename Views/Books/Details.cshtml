@@ -1,7 +1,7 @@
 ﻿@model DarkLibCW.Models.ViewModels.BookData
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детализация";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -64,7 +64,7 @@
     </tbody>
 </table>
 <hr />
-<h4>Информация о бронировании книги: </h4>
+@*<h4>Информация о бронировании книги: </h4>
 <table class="table">
     <thead>
         <tr>
@@ -84,9 +84,9 @@
         }
     </tbody>
 </table>
-<hr />
+<hr />*@
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Book.Id" class="btn btn-edit" type="submit">Изменить данные</a>
+    <a asp-action="Edit" asp-route-id="@Model.Book.Id" class="btn btn-edit" type="submit">Изменить</a>
     <a asp-action="Index" class="btn btn-back" type="submit">Вернуться к списку</a>
     <a asp-action="GetReport" asp-route-id="@Model.Book.Id" class="btn btn-1" type="submit">Получить отчет о книге</a>
 </div>

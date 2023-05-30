@@ -49,7 +49,7 @@ namespace DarkLibCW.Controllers
         public IActionResult Create()
         {
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id");
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "Id");
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "FullName");
             return View();
         }
 
@@ -67,7 +67,7 @@ namespace DarkLibCW.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", booking.BookId);
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "Id", booking.SubscriberId);
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "FullName", booking.SubscriberId);
             return View(booking);
         }
 
@@ -85,7 +85,7 @@ namespace DarkLibCW.Controllers
                 return NotFound();
             }
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", booking.BookId);
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "Id", booking.SubscriberId);
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "FullName", booking.SubscriberId);
             return View(booking);
         }
 
@@ -122,7 +122,7 @@ namespace DarkLibCW.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", booking.BookId);
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "Id", booking.SubscriberId);
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "FullName", booking.SubscriberId);
             return View(booking);
         }
 
@@ -158,6 +158,10 @@ namespace DarkLibCW.Controllers
             var booking = await _context.Bookings.FindAsync(id);
             if (booking != null)
             {
+                var book = _context.Books.Find(booking.BookId);
+                book.StatusId = 1;
+                await _context.SaveChangesAsync();
+
                 _context.Bookings.Remove(booking);
             }
             

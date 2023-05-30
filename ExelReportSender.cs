@@ -12,7 +12,7 @@ using System.Net;
 
 namespace DarkLibCW
 {
-    public class ExelReportSender
+    public class ExelReportSender : IJob
     {
         string file_path_template;
         string file_path_report;
@@ -42,11 +42,11 @@ namespace DarkLibCW
 
             count = issues.Count;
 
-            string path = "/Reports/report_issues.xlsx";
+            file_path_template = "/Reports/report_issues.xlsx";
             //Путь к файлу с результатом
-            string result = $"/Reports/report_issuesAll.xlsx";
-            FileInfo fi = new FileInfo(_appEnvironment.WebRootPath + path);
-            FileInfo fr = new FileInfo(_appEnvironment.WebRootPath + result);
+            file_path_report = $"/Reports/report_issuesAll.xlsx";
+            FileInfo fi = new FileInfo(_appEnvironment.WebRootPath + file_path_template);
+            FileInfo fr = new FileInfo(_appEnvironment.WebRootPath + file_path_report);
 
             using (ExcelPackage excelPackage = new ExcelPackage(fi))
             {

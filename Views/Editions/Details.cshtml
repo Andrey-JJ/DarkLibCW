@@ -1,13 +1,12 @@
 ﻿@model DarkLibCW.Models.Edition
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детализация";
 }
 
-<h1>Информация о записи:</h1>
+<h4>Издательство:</h4>
 
 <div>
-    <h4>Издание</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -19,6 +18,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-edit" type="submit">Изменить данные</a>
-    <a asp-action="Index" class="btn btn-back" type="submit">Вернуться к списку</a>
+    <a class="btn btn-edit" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-edit" type="submit">Изменить</a>
+    <a class="btn btn-back" asp-action="Index" class="btn btn-back" type="submit">Вернуться к списку</a>
 </div>

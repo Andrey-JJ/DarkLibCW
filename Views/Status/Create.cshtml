@@ -1,12 +1,10 @@
 ﻿@model DarkLibCW.Models.Status
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Добавление";
 }
 
-<h1>Create</h1>
-
-<h4>Status</h4>
+<h4>Статус:</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,14 +16,14 @@
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input class ="btn btn-1" type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-back" asp-action="Index">Вернуться к списку</a>
 </div>
 
 @section Scripts {

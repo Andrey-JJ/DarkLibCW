@@ -1,24 +1,33 @@
 ﻿@model IEnumerable<DarkLibCW.Models.CatalogCard>
 
 @{
-    ViewData["Title"] = "Каталожная карточка книги";
+    ViewData["Title"] = "Книги";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<p>
+@if(User.IsInRole("admin") || User.IsInRole("librarian"))
+{
     <a asp-action="Create" class="btn btn-1">Добавление новой записи</a>
-</p>
-
-<h4>Все каталожные карточки</h4>
+    <h4>Все каталожные карточки</h4>
+}
+else
+{
+    <h4>Все книги</h4>
+}
 <div class="row">
     @foreach (var card in Model)
     {
-        <div class="col-md-2 my-2">
+        <div class="col-md-2 my-2 card-wrapper">
             <a href="@Url.Action("Details", "CatalogCards", new { id = card.Id })">
-                <img src="@card.Image" class="img-thumbnail" />
-                <h5 class="mt-2 mb-0 card-wrapper card-title">@card.Title</h5>
-                <p class="mb-1 card-wrapper card-title">@card.Edition.Name, @card.EditionDate.Year</p>
+                <img src="@card.Image" class="img-thumbnail card-wrapper" />
+                <h5 class="mt-2 mb-0 card-title">@card.Title</h5>
+                <p class="mb-1 card-title">@card.Edition.Name, @card.EditionDate.Year</p>
             </a>
+            @if (User.IsInRole("admin") || User.IsInRole("librarian"))
+            {
+                <a asp-action="Edit" asp-route-id="@card.Id" class="btn btn-edit">Изменить</a>
+                <a asp-action="Delete" asp-route-id="@card.Id" class="btn btn-delete">Удалить</a>
+            }
         </div>
     }
 </div>

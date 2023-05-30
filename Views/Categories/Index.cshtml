@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<DarkLibCW.Models.ViewModels.CategoryBooks>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Категории";
 }
 
 @if(User.IsInRole("admin") || User.IsInRole("librarian"))
@@ -10,42 +10,20 @@
         <a class="btn btn-1" asp-action="Create">Добавление новой записи</a>
     </p>
 }
-@foreach(var category in Model)
+@foreach(var categoryBooks in Model)
 {
-    <h4>@Html.DisplayFor(model => category.Category.Name)</h4>
-    <hr />
-    @foreach(var catalogCards in category.CatalogCards)
-    {
-        <div class="col-md-2 my-2">
-            <a href="@Url.Action("Details", "CatalogCards", new { id = catalogCards.Id })">
-                <img src="@catalogCards.Image" class="img-thumbnail" />
-                <h5 class="mt-2 mb-0 card-wrapper card-title">@catalogCards.Title</h5>
-                <p class="mb-1 card-wrapper card-title">@catalogCards.Edition.Name, @catalogCards.EditionDate.Year</p>
-            </a>
-        </div>
-    }
+    <a href="@Url.Action("Details", "Categories", new { id = categoryBooks.Category.Id })">
+        <h4 class="text-decoration-none text-black">@Html.DisplayFor(model => categoryBooks.Category.Name)</h4>
+        <hr />
+        @foreach (var catalogCards in categoryBooks.CatalogCards)
+        {
+            <div class="col-md-2 my-2 card-wrapper">
+                <a href="@Url.Action("Details", "CatalogCards", new { id = catalogCards.Id })">
+                    <img src="@catalogCards.Image" class="img-thumbnail card-wrapper" />
+                    <h5 class="mt-2 mb-0 card-title">@catalogCards.Title</h5>
+                    <p class="mb-1 card-title">@catalogCards.Edition.Name, @catalogCards.EditionDate.Year</p>
+                </a>
+            </div>
+        }
+    </a>
 }
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                    <a class="btn btn-edit" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
-                    <a class="btn btn-edit" asp-action="Details" asp-route-id="@item.Id">Информация о записи</a>
-                    <a class="btn btn-delete" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>*@

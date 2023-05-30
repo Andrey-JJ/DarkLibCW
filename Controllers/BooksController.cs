@@ -228,13 +228,13 @@ namespace DarkLibCW.Controllers
                     worksheet.Cells[startLine, 5].Value = issue.IssueDate.Date;
                     worksheet.Cells[startLine, 6].Value = issue.ReturnDate.Date;
                 }
-                startLine = 3;
-                foreach (var booking in bookData.Bookings)
-                {
-                    worksheet.Cells[startLine, 8].Value = startLine - 2;
-                    worksheet.Cells[startLine, 9].Value = booking.Id;
-                    worksheet.Cells[startLine, 10].Value = booking.Subscriber.FullName;
-                }
+                //startLine = 3;
+                //foreach (var booking in bookData.Bookings)
+                //{
+                //    worksheet.Cells[startLine, 8].Value = startLine - 2;
+                //    worksheet.Cells[startLine, 9].Value = booking.Id;
+                //    worksheet.Cells[startLine, 10].Value = booking.Subscriber.FullName;
+                //}
                 excelPackage.SaveAs(fr);
             }
 

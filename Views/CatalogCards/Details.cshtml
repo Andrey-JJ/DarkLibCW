@@ -1,7 +1,7 @@
 ﻿@model DarkLibCW.Models.ViewModels.CardAndBooks
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детализация";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="bk-container">
@@ -71,8 +71,8 @@
                         @Html.DisplayFor(modelItem => item.Status.Type)
                     </td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-1" type="submit">Детализация</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-delete" type="submit">Удалить</a>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id" class="btn btn-1" type="submit">Детализация</a>
+                        <a asp-controller="Books" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-delete" type="submit">Удалить</a>
                         <a asp-action="GetReport" asp-controller="Books" asp-route-id="@item.Id" class="btn btn-1" type="submit">Получить отчет о книге</a>
                     </td>
                 </tr>

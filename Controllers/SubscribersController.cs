@@ -217,7 +217,7 @@ namespace DarkLibCW.Controllers
                 {
                     worksheet.Cells[startLine, 1].Value = startLine - 2;
                     worksheet.Cells[startLine, 2].Value = issue.Id;
-                    worksheet.Cells[startLine, 3].Value = issue.Book.CatalogCard.Title;
+                    worksheet.Cells[startLine, 3].Value = $"{issue.Book.CatalogCard.Title}№{issue.BookId}";
                     worksheet.Cells[startLine, 4].Style.Numberformat.Format = "dd.MM.yyyy";
                     worksheet.Cells[startLine, 5].Style.Numberformat.Format = "dd.MM.yyyy";
                     worksheet.Cells[startLine, 4].Value = issue.IssueDate.Date;

@@ -1,7 +1,7 @@
 ﻿@model DarkLibCW.Models.Book
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Удаление";
 }
 
 <h3>Вы действительно хотите удалить данную запись?</h3>
@@ -25,7 +25,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-delete" /> |
+        <input type="submit" value="Delete" class="btn btn-delete" />
         <a asp-action="Index" class="btn btn-back">Вернуться к списку</a>
     </form>
 </div>

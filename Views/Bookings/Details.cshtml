@@ -1,7 +1,7 @@
 ﻿@model DarkLibCW.Models.Booking
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детализация";
 }
 
 <h1>Информация о записи:</h1>
@@ -24,6 +24,6 @@
     </dl>
 </div>
 <div>
-    <a class="btn btn-edit" asp-action="Edit" asp-route-id="@Model?.Id">Изменить запись</a> |
+    <a class="btn btn-edit" asp-action="Edit" asp-route-id="@Model?.Id">Изменить</a>
     <a asp-action="Index" class="btn btn-back">Вернуться к списку</a>
 </div>

@@ -61,8 +61,8 @@ namespace DarkLibCW.Controllers
         public IActionResult Create()
         {
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id");
-            ViewData["LibrarianId"] = new SelectList(_context.Librarians, "Id", "Id");
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "Id");
+            ViewData["LibrarianId"] = new SelectList(_context.Librarians, "Id", "FullName");
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "FullName");
             return View();
         }
 
@@ -86,8 +86,8 @@ namespace DarkLibCW.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", issue.BookId);
-            ViewData["LibrarianId"] = new SelectList(_context.Librarians, "Id", "Id", issue.LibrarianId);
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "Id", issue.SubscriberId);
+            ViewData["LibrarianId"] = new SelectList(_context.Librarians, "Id", "FullName", issue.LibrarianId);
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "FullName", issue.SubscriberId);
             return View(issue);
         }
 
@@ -105,8 +105,8 @@ namespace DarkLibCW.Controllers
                 return NotFound();
             }
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", issue.BookId);
-            ViewData["LibrarianId"] = new SelectList(_context.Librarians, "Id", "Id", issue.LibrarianId);
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "Id", issue.SubscriberId);
+            ViewData["LibrarianId"] = new SelectList(_context.Librarians, "Id", "FullName", issue.LibrarianId);
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "FullName", issue.SubscriberId);
             return View(issue);
         }
 
@@ -143,8 +143,8 @@ namespace DarkLibCW.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Id", issue.BookId);
-            ViewData["LibrarianId"] = new SelectList(_context.Librarians, "Id", "Id", issue.LibrarianId);
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "Id", issue.SubscriberId);
+            ViewData["LibrarianId"] = new SelectList(_context.Librarians, "Id", "FullName", issue.LibrarianId);
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "Id", "FullName", issue.SubscriberId);
             return View(issue);
         }
 
@@ -181,6 +181,10 @@ namespace DarkLibCW.Controllers
             var issue = await _context.Issues.FindAsync(id);
             if (issue != null)
             {
+                var book = await _context.Books.FindAsync(issue.BookId);
+                book.StatusId = 1;
+                await _context.SaveChangesAsync();
+
                 _context.Issues.Remove(issue);
             }
             

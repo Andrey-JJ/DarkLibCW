@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<DarkLibCW.Models.Booking>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Бронирование";
 }
 
 <h1>Таблица Бронирования книг</h1>
@@ -32,7 +32,7 @@
             </td>
             <td>
                     <a class="btn btn-edit" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
-                    <a class="btn btn-edit" asp-action="Details" asp-route-id="@item.Id">Информация о записи</a>
+                    <a class="btn btn-edit" asp-action="Details" asp-route-id="@item.Id">Детализация</a>
                     <a class="btn btn-delete" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>

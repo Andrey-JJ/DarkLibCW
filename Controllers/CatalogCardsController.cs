@@ -143,8 +143,7 @@ namespace DarkLibCW.Controllers
                 if (uploadImg != null)
                 {
                     string path = "/Files/" + uploadImg.FileName;
-                    using (var fileStream = new
-                   FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                     {
                         await uploadImg.CopyToAsync(fileStream);
                     }
@@ -204,6 +203,7 @@ namespace DarkLibCW.Controllers
             }
 
             var catalogCard = await _context.CatalogCards
+                .Include(c => c.Author)
                 .Include(c => c.Category)
                 .Include(c => c.Edition)
                 .FirstOrDefaultAsync(m => m.Id == id);

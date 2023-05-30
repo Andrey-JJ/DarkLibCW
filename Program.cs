@@ -37,7 +37,7 @@ builder.Services.AddQuartz(q =>
     q.UseMicrosoftDependencyInjectionJobFactory();
     var jobKey = new JobKey("ExelReportSender");
 
-    q.AddJob<ReportSender>(opts => opts.WithIdentity(jobKey));
+    q.AddJob<ExelReportSender>(opts => opts.WithIdentity(jobKey));
 
     q.AddTrigger(t => t
     .ForJob(jobKey)
