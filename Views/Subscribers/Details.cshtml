@@ -92,13 +92,13 @@
 <div>
     @if(User.IsInRole("admin") || User.IsInRole("librarian"))
     {
-        <a class="btn btn-1" asp-action="GetReport" asp-route-id="@Model.Subscriber.Id">Получить список книг</a>
+        <a class="btn btn-1" asp-action="GetReport" asp-route-id="@Model.Subscriber.Id">Получить формуляр читателя</a>
         <a class="btn btn-edit" asp-action="Edit" asp-route-id="@Model.Subscriber.Id">Изменить</a>
         <a class="btn btn-back" asp-action="Index">Вернуться к списку</a>
     }
     else
     {
-        <a class="btn btn-1" asp-action="GetReport" asp-route-id="@Model.Subscriber.Id">Получить список книг</a>
+        <a class="btn btn-1" asp-action="GetReport" asp-route-id="@Model.Subscriber.Id">Получить формуляр</a>
         <a class="btn btn-back" asp-controller="Home" asp-action="Index">Вернуться на главную</a>
     }
 </div>
